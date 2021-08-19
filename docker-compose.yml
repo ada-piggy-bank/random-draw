@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  app:
+    image: 'random-draw:latest'
+    build:
+      context: .
+      args:
+        JAR_FILE: 'build/libs/*.jar'
+        PROPERTIES_FILE: 'build/resources/main/application.properties'
+    ports:
+      - "8080:8080"
+    container_name: random-draw
