@@ -4,6 +4,7 @@ import com.gormlab.randomdraw.model.WeightedEntry;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class DrawMaster {
     }
 
     public List<WeightedEntry> draw(List<WeightedEntry> weightedEntries, int numberOfWinners) {
+        orderEntries(weightedEntries);
         List<WeightedEntry> winners = new ArrayList<>();
         for (int i = 0; i < numberOfWinners; i++) {
             int nextWinner = random.nextInt(getRemainingEntryCount(weightedEntries)) + 1;
@@ -30,6 +32,10 @@ public class DrawMaster {
         }
 
         return winners;
+    }
+
+    private void orderEntries(List<WeightedEntry> weightedEntries) {
+        Collections.sort(weightedEntries);
     }
 
     private int getRemainingEntryCount(List<WeightedEntry> weightedEntries) {

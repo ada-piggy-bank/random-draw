@@ -1,6 +1,7 @@
 package com.gormlab.randomdraw.controller;
 
 import com.gormlab.randomdraw.model.WeightedEntry;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import java.util.Random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -67,7 +69,7 @@ class DrawMasterTest {
         List<WeightedEntry> winners = drawmaster.draw(weightedEntries);
 
         verify(weightedEntry).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntry)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntry).toString()));
     }
 
     @Test
@@ -76,7 +78,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo, never()).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntry)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntry).toString()));
     }
 
     @Test
@@ -85,7 +87,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo, never()).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntry)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntry).toString()));
     }
 
     @Test
@@ -96,7 +98,7 @@ class DrawMasterTest {
 
         verify(weightedEntryTwo).setWeight(0);
         verify(weightedEntry, never()).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntryTwo)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntryTwo).toString()));
     }
 
     @Test
@@ -107,7 +109,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo, never()).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntry)));
+        assertEquals(winners.toString(), Collections.singletonList(weightedEntry).toString());
     }
 
     @Test
@@ -118,7 +120,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo, never()).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntry)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntry).toString()));
     }
 
     @Test
@@ -129,7 +131,7 @@ class DrawMasterTest {
 
         verify(weightedEntry, never()).setWeight(0);
         verify(weightedEntryTwo).setWeight(0);
-        assertThat(winners, is(Collections.singletonList(weightedEntryTwo)));
+        assertThat(winners.toString(), is(Collections.singletonList(weightedEntryTwo).toString()));
     }
 
     @Test
@@ -140,7 +142,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo).setWeight(0);
-        assertThat(winners, is(Arrays.asList(weightedEntry, weightedEntryTwo)));
+        assertThat(winners.toString(), is(Arrays.asList(weightedEntry, weightedEntryTwo).toString()));
     }
 
     @Test
@@ -151,7 +153,7 @@ class DrawMasterTest {
 
         verify(weightedEntry).setWeight(0);
         verify(weightedEntryTwo).setWeight(0);
-        assertThat(winners, is(Arrays.asList(weightedEntryTwo, weightedEntry)));
+        assertThat(winners.toString(), is(Arrays.asList(weightedEntryTwo, weightedEntry).toString()));
     }
 
     @Test
@@ -176,8 +178,17 @@ class DrawMasterTest {
 
         verify(random).setSeed(1);
 
-        assertThat(winners, is(Arrays.asList(weightedEntry, weightedEntryTwo)));
+        assertThat(winners.toString(), is(Arrays.asList(weightedEntry, weightedEntryTwo).toString()));
 
+    }
+
+    @Test
+    public void entriesAreOrderedAlphabeticallyBeforeDraw() {
+        List<WeightedEntry> unOrderedWeightedEntries = Arrays.asList(weightedEntryTwo, weightedEntry);
+
+        List<WeightedEntry> winners = drawmaster.draw(weightedEntries, 2, 1);
+
+        assertThat(winners.toString(), is(Arrays.asList(weightedEntry, weightedEntryTwo).toString()));
     }
 
 }
